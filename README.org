@@ -18,7 +18,7 @@ Extensions and variations are possible, but the main purpose is to help my
 students and learn myself along the way. As such, I will first focus on basic
 computation and visualization, even if intentionally disregarding more
 complex tasks, theories, methods or general optimization. The focus is to get 
-up and (at least) walking asap.
+up and (at least) walking asap. /Nevertheless, I do expect development to be slow/.
 
 *The tools that I will be using and teaching are exclusively open source*
 *and furthermore, I will advocate DIY methods where appropriate*.
