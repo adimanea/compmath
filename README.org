@@ -1,0 +1,52 @@
+#+TITLE: Computational (Computer) Mathematics
+#+AUTHOR: Adrian Manea
+
+* Purpose and Description
+The idea for this repository is to include notes for various computational
+methods and tools for teaching and learning mathematics. I set up the
+repository first as a tool for my own learning, so I will be documenting
+the process along the way. At the same time, it is motivated by my
+teaching and as such, it will focus on the undergraduate math
+chapters I'm teaching at the Politehnica University of Bucharest.
+Therefore, it will mostly follow the chapters I teach and for which I
+wrote [[https://adrianmanea.xyz/pages/4-didactica.php][seminar notes]] on my website (in Romanian).
+
+The outline of the chapters and subjects I will try to cover can be
+read [[file:syllabus.org][here]].
+
+Extensions and variations are possible, but the main purpose is to help my
+students and learn myself along the way. As such, I will first focus on basic
+computation and visualization, even if intentionally disregarding more
+complex tasks, theories, methods or general optimization. The focus is to get 
+up and (at least) walking asap.
+
+*The tools that I will be using and teaching are exclusively open source*
+*and furthermore, I will advocate DIY methods where appropriate*.
+
+* Tools
+Expected to feature:
+- [[https://www.sagemath.org/][SageMath]];
+- [[https://jupyter.org/][Jupyter notebooks]];
+- [[https://www.gnu.org/software/octave/][GNU Octave]];
+- [[https://github.com/daly/axiom][Axiom]];
+- [[https://www.gap-system.org/][GAP]];
+- [[https://pari.math.u-bordeaux.fr/][PARI/GP]];
+- [[https://www.geogebra.org/][GeoGebra]];
+- Document preparation and markup such as [[https://www.latex-project.org/][LaTeX]], [[https://ctan.org/pkg/beamer?lang=en][Beamer]], [[https://pandoc.org/][pandoc]];
+- General purpose programming and scripting (Haskell, C, shell, Python).
+
+Aside from the documentation of the tools listed above, the seminar notes
+I have prepared, various mathematics textbooks, I will be adding more
+resources once they are needed.
+
+
+
+
+NOTE: The idea of this project is to /not/ reinvent the wheel, as most of
+the tools listed above have excellent documentation and are well suited
+for the tasks I propose. Hence, my attempt is to /compile/ and /combine/
+the relevant chapters and examples in a package that follows closely my
+methods of teaching. Furthermore, having this in view offers me a good
+motivation and task-oriented focus to learn at least some basics of the
+tools above. /I am not, do not claim to be and do not intend to become an/
+/expert in any of the above, including programming in any language/.

@@ -1,0 +1,67 @@
+#+TITLE: Syllabus
+#+AUTHOR: Adrian Manea
+
+* Algebra: Focus on computation
+- Basic abstract algebra (commutative groups, polynomial rings,
+  [number] fields);
+- Vector spaces and subspaces (basic structural properties and examples);
+- Geometric vector spaces;
+- Matrices (Gauss elimination, Jordan canonical form, diagonal
+  form, LU decomposition, SVD);
+- Eigenvalues, eigenvectors, eigenspaces;
+- Euclidean spaces (scalar product, Gram-Schmidt orthogonalization,
+  projections);
+- Bilinear and quadratic forms;
+- Conic curves and quadric surfaces;
+
+* Geometry: Focus on visualization
+- 2D and 3D vector representations, decomposition and operations;
+- Curves, lines, planes, surfaces;
+- Vector fields;
+- Vector calculus (field lines, gradient, divergence, curl);
+
+* Real Analysis: Focus on intuition and visualization
+- Sequences and numeric series: computation or intuition of limits;
+- Continuity and (symbolic) differentiation in one or more variables;
+- Taylor series expansion as computational approximation;
+- Extrema in 2D and 3D;
+- Linear regression and the least square method for line fitting;
+- Line integrals and applications in physics and geometry;
+- Surface integrals and applications in physics and geometry;
+- Double and triple integrals and applications in geometry (areas, volumes);
+- Improper integrals;
+
+* Complex Analysis: Focus on visualisation
+- Basic operations with complex numbers, including geometric and
+  trigonometric representation;
+- Complex functions: limits, differentiation and plots;
+- Complex integrals;
+
+* Integral Transforms: Focus on applications
+- Laplace transform;
+- Fourier series and Fourier transform;
+- Discrete Laplace transform (Z);
+- Applications in Digital Signal Processing and basic electronics;
+
+* Differential Equations: Focus on applications
+- First order differential equations;
+- Higher order differential equations;
+- First order partial differential equations;
+- Second order partial differential equations;
+- Applications to vector fields and physics;
+
+* Statistics and Probability Theory: Focus on computations
+- Basic probabilities, including continuous case computation and
+  geometric visualisation;
+- Probability schemes;
+- Random variables, discrete and continuous, with basic numerical characteristics;
+- Random vectors, sequences of random variables;
+- Markov chains;
+- Basic estimation and statistics;
+
+
+
+
+
+NOTE: The list is expected to change during the process and I am well aware of
+the size of the project, hence it is expected to be slow in development.
