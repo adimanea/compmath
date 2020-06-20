@@ -8,6 +8,7 @@ As such, it will be centered on my tools and approach and a more
 My setup is:
 - OS: Manjaro i3;
 - Computing Environment: Emacs 26.3;
+  + packages: [[https://github.com/jorgenschaefer/elpy][elpy]], [[https://github.com/sagemath/sage-shell-mode][sage-shell-mode]], [[https://github.com/sagemath/ob-sagemath][ob-sagemath]];
 - Web browser: Firefox 77.
 
 Main resource: /Computational Mathematics with SageMath/ by Zimmermann,
@@ -78,6 +79,8 @@ be available once the server is restarted.
 
 By entering =%display latex= in any Jupyter cell, all subsequent outputs
 will be formatted using MathJax.
+
+The shell is closed with =exit()=.
 
 ** Loading and Attaching Source Files
 If so preferred, instructions can be saved in a =.sage= file and loaded
