@@ -1,0 +1,77 @@
+#+TITLE: SageMath Notes
+#+AUTHOR: Adrian
+
+This document contains notes that help me learn to use Sage in my workflow.
+As such, it will be centered on my tools and approach and a more 
+"general audience" will follow.
+
+My setup is:
+- OS: Manjaro i3;
+- Computing Environment: Emacs 26.3;
+- Web browser: Firefox 77.
+
+* Installation and First Run
+We need to install both Sage as a program and its Jupyter kernel if we are
+to use it as such. I will not be using virtual environments, but that is
+possible. So:
+#+BEGIN_SRC sh
+  $ sudo pacman -S sagemath sagemath-jupyter
+#+END_SRC
+
+Beforehand or afterwards, one may look at the related packages with:
+#+BEGIN_SRC sh
+  $ pacman -Ss sagemath
+#+END_SRC
+
+Perhaps relevant could be:
+- =sagetex=, which will allow one to integrate Sage computations into
+  (La)TeX documents;
+- =sagemath-doc=, which contain a local HTML copy of the documentation.
+
+After installation, it could be run either in the terminal by simply typing
+=sage=:
+#+BEGIN_SRC sh
+  $ sage
+#+END_SRC
+which will start with:
+#+BEGIN_SRC sh
+	┌────────────────────────────────────────────────────────────────────┐
+	│ SageMath version 9.1, Release Date: 2020-05-20                     │
+	│ Using Python 3.8.3. Type "help()" for help.                        │
+	└────────────────────────────────────────────────────────────────────┘
+	sage:  
+#+END_SRC
+or if you choose to run it inside a Jupyter notebook, =cd= to the directory
+where the server will be started and where you choose to store the notebooks.
+Then enter:
+#+BEGIN_SRC sh
+  $ sage -n jupyter
+#+END_SRC
+This will start the server and one can choose to create a new notebook, with
+the appropriate Sage kernel.
+
+If only the Python kernel is available, make sure you have installed also the
+=sagemath-jupyter= package as well.
+
+Interactive computations can be performed, in plain text mode in the terminal,
+by pressing =Enter= after each step or inside Jupyter notebook cells, which
+are evaluated by pressing =Shift + Enter= after each command.
+
+Should a command require GUI capabilities that the terminal is not capable of,
+such as plots, the terminal interface will open the result in the default
+web browser.
+
+For example:
+#+BEGIN_SRC sh
+  sage: u(n) = n^100 / 100^n
+  sage: plot(u(x), x, 1 40)
+#+END_SRC
+will show the plot in the notebook if run inside Jupyter or in a web browser,
+if run from the terminal.
+
+The Jupyter server can be killed with =C-c C-c=, but /make sure to save the/
+/notebook beforehand/. Otherwise, subsequent operations on the notebook will
+be available once the server is restarted.
+
+By entering =%display latex= in any Jupyter cell, all subsequent outputs
+will be formatted using MathJax.
