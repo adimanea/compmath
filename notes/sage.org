@@ -545,7 +545,7 @@ Example, for the curve \rho(\theta) = 1 + e * cos(n \theta):
 The results are [[file:../scratch/polar1.png][here]] and [[file:../scratch/polar2.png][here]].
 
 ** Implicit Plots
-Let us draw the plot $ C = \{ z \in \mathbb{C}, |cos(z^4)| = 1 \} $. This can be
+Let us draw the plot C = \{ z \in \mathbb{C}, |cos(z^4)| = 1 \}. This can be
 done either with =implicit_plot= or =complex_plot=.
 #+BEGIN_SRC sage :tangle ../scratch/implicit_plot.sage :exports both :session t :results output
   z = var('z')
