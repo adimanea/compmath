@@ -50,3 +50,5 @@ methods of teaching. Furthermore, having this in view offers me a good
 motivation and task-oriented focus to learn at least some basics of the
 tools above. /I am not, do not claim to be and do not intend to become an/
 /expert in any of the above, including programming in any language/.
+* Progress
+- Added some general purpose, introductory SageMath notes [[file:notes/sage.org][here]].
