@@ -75,3 +75,79 @@ be available once the server is restarted.
 
 By entering =%display latex= in any Jupyter cell, all subsequent outputs
 will be formatted using MathJax.
+
+What will follow is an overview of the Sage syntax and examples that will later
+be put together in a more focused way in order to be used in my classes.
+
+* Numerical Computation
+Simple computations can be inserted readily, using the Python syntax:
+#+BEGIN_SRC sh
+  sage: 2^3
+  8
+  sage: 3**3
+  27
+  sage: 20/14
+  10/7
+  sage: 20.0 / 14
+  1.42857142457143
+  sage: numerical_approx(20/14)
+  1.42857142457143
+  sage: numerical_approx(20/14, digits=3)
+  1.429
+  sage: 20 // 6		# quotient
+  3
+  sage: 20 % 6		# remainder
+  2
+  sage: arctan(1)
+  1/4*pi
+  sage: exp(2 * I * pi)
+  1
+#+END_SRC
+
+Help and examples for each function can be called by adding =?= after the
+function name, e.g. =sin?=.
+
+* More Syntax and Symbolic Variables
+To save a computation, it must be assigned to a variable:
+#+BEGIN_SRC sh
+  sage: y = 1 + 2
+  sage: y
+  3
+#+END_SRC
+
+Chaining instructions is done with =;=:
+#+BEGIN_SRC sh
+  sage: y = 3 ; x = y + 2 ; x
+  5
+#+END_SRC
+
+The previous results are saved in the special variables =_, __, ___=.
+
+In case one redefines some predefined variables or functions, such as
+=pi=, they can be restored with =restore()=. The function =reset()= does
+even more, by clearing all the user-defined variables as well.
+
+*Symbolic variables* can be declared using the class =SR= (from Symbolic Ring),
+with the method =SR.var()=, which is also available in shorthand with =var()=.
+Only =x= is reserved and predefined as symbolic variable, any others should
+be declared explicitly.
+#+BEGIN_SRC sh
+  sage: z = SR.var('z')
+  sage: 2*z + 3
+  2*z + 3
+  sage: y = var('z')
+  sage: 2*y + 3
+  2*z + 3
+#+END_SRC
+
+There is also a shortcut for defining a *sequence of symbolic variables*:
+#+BEGIN_SRC sh
+  sage: x = var('x', 100)			# declares x0, x1, ..., x99
+  sage: (x[0] + x[1])*x[99]
+  (x0 + x1)*x99
+#+END_SRC
+
+/In Jupyter notebooks only/, it is possible to use =automatic_names(True)=,
+which creates a symbolic variable automatically whenever a new name is used.
+
+* Analysis and Algebra
