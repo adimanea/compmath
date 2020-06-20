@@ -472,5 +472,5 @@ Examples follow.
 
 *Remarks:* 
 - For eigenvectors, Sage gives us a list of triples (eigenvalue, eigenvectors
-forming a basis for that eigenspace, algebraic multiplicity of the eigenspace);
+  forming a basis for that eigenspace, algebraic multiplicity of the eigenspace);
 - For the Jordan form, we are given the matrix that was used to obtain the form.
