@@ -10,6 +10,9 @@ My setup is:
 - Computing Environment: Emacs 26.3;
 - Web browser: Firefox 77.
 
+Main resource: /Computational Mathematics with SageMath/ by Zimmermann,
+Casamayou et al., freely available [[http://dl.lateralis.org/public/sagebook/sagebook-ba6596d.pdf][here]].
+
 * Installation and First Run
 We need to install both Sage as a program and its Jupyter kernel if we are
 to use it as such. I will not be using virtual environments, but that is
@@ -300,3 +303,121 @@ Some of these can take more arguments. For example, try the following
 #+END_SRC
 
 *** Sequences
+Start with the following problem as motivation:
+#+BEGIN_EXAMPLE
+Let u_n be the sequence n^100/100^n.
+
+Compute the first 10 terms. What is the monotony of the sequence?
+What is its limit? From which value of n does u_n belong to [0, 1e-8]?
+#+END_EXAMPLE
+
+For the first part, we define the sequence and output its first 10 terms:
+#+BEGIN_SRC sage
+  sage: u(n) = n^100 / 100^n
+  sage: u(1.);u(2.);u(3.)...
+  0.01000000000000000
+  1.26765060022823e26
+  5.15377520732011e41
+#+END_SRC
+
+Now, to get an intuition on its variance, we can easily plot it, with
+the image shown in the Jupyter notebook or opened separately in the browser
+if running from the terminal:
+#+BEGIN_SRC sage
+  sage: plot(u(x), x, 1, 40)
+  Graphics object consisting of 1 graphics primitive
+#+END_SRC
+
+We can now try to see where is the maximum of the sequence, looking at
+the graph. That is, we are looking for roots of its derivative:
+#+BEGIN_SRC sage
+  sage: v(x) = diff(u(x), x); sol = solve(v(x) == 0, x); sol
+  [x == 50/log(10), x == 0]
+  sage: floor(sol[0].rhs())
+  21
+#+END_SRC
+So the sequence is increasing up to index 21 and decreasing after index 22.
+
+Then we can compute its limit:
+#+BEGIN_SRC sage
+  sage: limit(u(n), n=infinity)
+  0
+  sage: n0 = find_root(u(n) - 1e-8 == 0, 22, 1000); n0
+  105.07496210187252
+#+END_SRC
+
+It follows that from index 106, the sequence always lies in =[0, 1e-8]=.
+
+*** Power Series Expansion
+The general syntax for the power series expansion of order =n= at =x0=
+for a function =f= is =f(x).series(x==x0, n)=:
+#+BEGIN_SRC sage
+sage: ((1+arctan(x))^(1/x)).series(x==0, 3)
+(e) + (-1/2e)x + (1/8e)x^2 + Order(x^3)
+#+END_SRC
+
+One can skip the big-Oh terms with the method =truncate()=:
+#+BEGIN_SRC sage
+sage: ((1+arctan(x))^(1/x)).series(x==0, 3).truncate()
+(e) + (-1/2e)x + (1/8e)x^2
+#+END_SRC
+
+Taylor expansions can also be used, with the added feature that one can
+specify the asymptotic behaviour at infinity, i.e. what is a polynomial
+function that is asymptotically similar to the function given:
+#+BEGIN_SRC sage
+  sage: taylor(sin(x), x, 0, 7)
+  -1/5040*x^7 + 1/120*x^5 - 1/6*x^3 + x
+  sage: taylor((x**3+x)**(1/3) - (x**3-x)**(1/3), x, infinity, 2)
+  2/3/x
+#+END_SRC
+
+The second computation means that when =x= goes to infinity, the function
+in the input behaves as =2/(3x)=.
+
+*** Derivatives and Integrals
+Derivatives are computed with =derivative= or =diff= and it is the same
+syntax for functions of one or more variables:
+#+BEGIN_SRC sage
+  sage: diff(sin(x^2), x)
+  2*x*cos(x^2)
+  sage: function('f')(x); function('g')(x); diff(f(g(x)), x)
+  f(x)
+  g(x)
+  D[0](f)(g(x))*diff(g(x), x)
+  sage: diff(ln(f(x)), x)
+  diff(f(x), x)/f(x)
+
+  # partial derivative
+  sage: f(x, y) = x*y + sin(x^2) + e^(-x); derivative(f, y)
+  (x, y) |--> x
+
+  # check that a function is harmonic
+  sage: x, y = var('x, y'); f = ln(x**2 + y**2)/2
+  sage: delta = diff(f, x, 2) + diff(f, y, 2)
+  sage: delta.simplify_rational()
+  0
+#+END_SRC
+
+Integrals can be computed with =integrate= or =integral=:
+#+BEGIN_SRC sage
+  sage: sin(x).integral(x, 0, pi/2)
+  1
+  sage: integrate(1/(1+x^2), x)
+  arctan(x)
+  sage: integrate(1/(1 + x^2), x, -infinity, infinity)
+  pi
+
+  # parametric integral
+  sage: u = var('u'); f = x * cos(u) / (u^2 + x^2)
+  sage: assume(x>0); f.integrate(u, 0, infinity)
+  1/2*pi*e^(-x)
+  sage: forget(); assume(x<0); f.integrate(u, 0, infinity)
+  -1/2*pi*e^x
+
+  # numeric integral
+  sage: integral_numerical(sin(x)/x, 0, 1)
+  (0.946083..., 1.05036...e-14)           # (value, error)
+#+END_SRC
+
+** Basic Linear Algebra
