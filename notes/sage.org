@@ -151,3 +151,100 @@ There is also a shortcut for defining a *sequence of symbolic variables*:
 which creates a symbolic variable automatically whenever a new name is used.
 
 * Analysis and Algebra
+** Expansions, Substitutions and Simplification
+In symbolic computations, one can make explicit substitutions
+with the =subs()= method for variables or the =substitute()=
+method for functions. Note the double equal sign for the latter:
+#+BEGIN_SRC sage
+  sage: a, x = var('a, x'); y = cos(x + a) * (x + 1); y
+  (x + 1)*cos(a + x)
+  sage: y.subs(a = -x); y.subs(x = pi/2, a=pi/3); y.subs(x = 0.5, a=2.3)
+  x + 1
+  -1/4*sqrt(3)*(pi + 2)
+  -1.41333351100299
+  sage: y, z = var('y, z'); f = x^3 + y^2 + z
+  sage: f.substitute(x^3 == y^2, z == 1)
+  2*y^2 + 1
+#+END_SRC
+
+Functions can be expanded with the =expand()= method and symbolic expressions
+can be turned into functions with the =function()= method:
+#+BEGIN_SRC sage
+  sage: f(x) = (2*x + 1)^3; f(-3)
+  -125
+  sage: f.expand()
+  x |--> 8*x^3 + 12*x^2 + 6*x + 1
+
+  sage: y = var('y'); u = sin(x) + x*cos(y)
+  sage: v = u.function(x, y); v
+  (x, y) |--> x*cos(y) + sin(x)
+  sage: w(x, y) = u; w
+  (x, y) |--> x*cos(y) + sin(x)
+#+END_SRC
+
+Further, expressions can be factored, grouping the terms according to the
+powers of a specified variable, with the =collect()= method:
+#+BEGIN_SRC sage
+  sage: p = (x + y) * (x + 1)^2
+  sage: p2 = p.expand(); p2
+  x^3 + x^2*y + 2*x^2 + 2*x*y + x + y
+  sage: p2.collect(y)
+  x^3 + x^2*(y + 2) + x*(2*y + 1) + y
+#+END_SRC
+
+For rational functions, there are also the methods:
+- =combine()=, which computes the fractions that have a common denominator;
+- =partial_fraction()=, which decomposes in partial fractions.
+#+BEGIN_SRC sage
+  sage: fraction = b/a + c/a + d/n
+  sage: fraction.combine()
+  (b + c)/a + d/n
+
+  sage: fraction = 1/((x^3 + 1)*y^2)
+  sage: fraction.partial_fraction(x)
+  (-(x-2))/(3*(x^2 - x + 1)*y^2) + 1/(3*(x + 1)*y^2)
+#+END_SRC
+
+** Assumptions
+Computations can be made under certain assumptions, which if not explicitly
+discarded, are kept throughout the computation:
+#+BEGIN_SRC sage
+  sage: assume(x > 0); bool(sqrt(x^2) == x)
+  True
+  sage: forget(x > 0); bool(sqrt(x^2) == x)
+  False
+  sage: n = var('n'); assume(n, 'integer'); sin(n*pi)
+  0
+#+END_SRC
+
+** Solving Equations
+| Syntax                      | What it solves/returns          |
+|-----------------------------+---------------------------------|
+| =solve=                     | symbolic solution for equations |
+| =roots=                     | roots with multiplicities       |
+| =find_root=                 | numerical solving               |
+| =solve_right=, =solve_left= | linear equations                |
+| =desolve=                   | differential equations          |
+| =rsolve=                    | recurrence equations            |
+Some of these can take more arguments. For example, try the following
+(output is omitted):
+#+BEGIN_SRC sage
+  sage: z, phi = var('z, phi')
+  sage: eq = z**2 - 2/cos(phi)*z + 5/cos(phi)**2 - 4 == 0; eq
+  sage: eq.lhs()                  # extracts left hand side
+  sage: solve(eq, z)              # solve for z
+  sage: solve(eq, z, solution_dict=True)  # return solutions as dictionary
+  sage: solve([x + y == 3, 2*x + 2*y == 6], x, y) # system of eqs
+  sage: solve(x^2 + x - 1 > 0, x)         # inequality
+  sage: find_root(eq, 0.1, pi)            # search in [0.1, pi]
+  sage: (x^3 + 2*x + 1).roots(x)          # return roots
+  sage: (x^3 + 2*x + 1).roots(x, ring=RR) # return REAL roots only
+  sage: y = function('y')(x)              # y = y(x)
+
+  # Second Order Differential Equation
+  # syntax: desolve(equation, unknown_function, boundary_conds
+  # in this case: y_0, x_0 and dy/dx(0)
+  sage: desolve(diff(y,x,x) + x*diff(y,x) + y == 0, y, [0,0,1])
+#+END_SRC
+
+** Analysis
