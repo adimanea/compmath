@@ -62,7 +62,7 @@ such as plots, the terminal interface will open the result in the default
 web browser.
 
 For example:
-#+BEGIN_SRC sh
+#+BEGIN_SRC sage
   sage: u(n) = n^100 / 100^n
   sage: plot(u(x), x, 1 40)
 #+END_SRC
@@ -98,7 +98,7 @@ be put together in a more focused way in order to be used in my classes.
 
 * Numerical Computation
 Simple computations can be inserted readily, using the Python syntax:
-#+BEGIN_SRC sh
+#+BEGIN_SRC sage
   sage: 2^3
   8
   sage: 3**3
@@ -126,14 +126,14 @@ function name, e.g. =sin?=.
 
 * More Syntax and Symbolic Variables
 To save a computation, it must be assigned to a variable:
-#+BEGIN_SRC sh
+#+BEGIN_SRC sage
   sage: y = 1 + 2
   sage: y
   3
 #+END_SRC
 
 Chaining instructions is done with =;=:
-#+BEGIN_SRC sh
+#+BEGIN_SRC sage
   sage: y = 3 ; x = y + 2 ; x
   5
 #+END_SRC
@@ -148,7 +148,7 @@ even more, by clearing all the user-defined variables as well.
 with the method =SR.var()=, which is also available in shorthand with =var()=.
 Only =x= is reserved and predefined as symbolic variable, any others should
 be declared explicitly.
-#+BEGIN_SRC sh
+#+BEGIN_SRC sage
   sage: z = SR.var('z')
   sage: 2*z + 3
   2*z + 3
@@ -158,7 +158,7 @@ be declared explicitly.
 #+END_SRC
 
 There is also a shortcut for defining a *sequence of symbolic variables*:
-#+BEGIN_SRC sh
+#+BEGIN_SRC sage
   sage: x = var('x', 100)			# declares x0, x1, ..., x99
   sage: (x[0] + x[1])*x[99]
   (x0 + x1)*x99
