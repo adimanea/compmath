@@ -76,6 +76,23 @@ be available once the server is restarted.
 By entering =%display latex= in any Jupyter cell, all subsequent outputs
 will be formatted using MathJax.
 
+** Loading and Attaching Source Files
+If so preferred, instructions can be saved in a =.sage= file and loaded
+in the REPL. This can be done in two ways:
+#+BEGIN_SRC sage
+  # loading a file
+  sage: load("example.sage")
+
+  # attaching a file
+  sage: attach("example.sage")
+#+END_SRC
+
+*Loading* will just execute the file as it is, whereas *attaching* will
+refresh the outputs if the attached file changes (i.e. it will be attached
+as "living" to the current REPL).
+
+-------
+
 What will follow is an overview of the Sage syntax and examples that will later
 be put together in a more focused way in order to be used in my classes.
 
