@@ -557,3 +557,140 @@ done either with =implicit_plot= or =complex_plot=.
 #+END_SRC
 
 They are [[file:../scratch/complex_plot.png][here]] and [[file:../scratch/implicit_plot.png][here]].
+
+** Data Plots
+For bar charts and histograms, we have the following syntax examples:
+#+BEGIN_SRC sage
+  bar_chart([randrange(15) for i in range(20)])
+  bar_chart([x^2 for x in range(1,20)], width=0.2)
+
+  mylist = [10 + floor(10*sin(i)) for i in range(100)]
+  bar_chart(mylist)
+  finance.TimeSeries(mylist).plot_histogram(bins=20)
+#+END_SRC
+
+The basic ideas are:
+- bar charts and histograms are drawn from /lists/ so input must be of type list;
+- the option =bins= manages the length of each interval that is plotted (default 50);
+- see [[https://doc.sagemath.org/html/en/reference/finance/sage/finance/time_series.html][here]] more details on the =finance.TimeSeries= class.
+
+CSV can also be used to plot, after importing the data:
+#+BEGIN_SRC sage
+  import csv
+
+  reader = csv.reader(open("exam01.csv"))
+  grades = []; list = []
+  for line in reader:
+	  grades.append(line[2])
+  for i in grades:
+	  try:
+		  f = float(i)
+	  except ValueError:
+		  pass
+	  else:
+		  list.append(f)
+  finance.TimeSeries(list).plot_histogram(bins = 20)
+#+END_SRC
+
+If we have a *discrete graph* and we want to draw lines between the points,
+we can use the =line= command. For example, this plots a random walk:
+#+BEGIN_SRC sage :session t :tangle ../scratch/random_walk.sage :exports both
+  n, l, x, y = 1000, 1, 0, 0; p = [[0,0]]
+  for k in range(n):
+	  theta = (2*pi*random()).n(digits=5)
+	  x, y = x + l * cos(theta), y + l * sin(theta)
+	  p.append([x, y])
+  g1 = line([p[n], [0, 0]], color='red', thickness=2)
+  g1 += line(p, thickness=.4); g1.show(aspect_ratio=1)
+#+END_SRC
+
+Which gives [[file:../scratch/random_walk.png][this]].
+
+** Plotting Solutions of Differential Equations
+We use the following example: Draw the integral curves of the differential
+equation xy' - 2y = x^3.
+#+BEGIN_SRC sage :session t :tangle ../scratch/lde_plot.sage :exports both
+  x = var('x'); y = function('y')
+  DE = x*diff(y(x), x) == 2*y(x) + x^3
+  sol = []
+  for i in srange(-2, 2, 0.2):
+	  sol.append(desolve(DE, [y(x), x], ics=[1,i]))
+	  sol.append(desolve(DE, [y(x), x], ics=[-1,i]))
+  g = plot(sol, x, -2, 2)
+  y = var('y')
+  g += plot_vector_field((x, 2*y+x^3), (x, -2, 2), (y, -1, 1))
+  g.show(ymin=-1, ymax=1)
+#+END_SRC
+
+which gives [[file:../scratch/lde_plot.png][this]].
+
+** Osculating Circles of a Parabola
+The centre of curvature \Omega at a point M_t = (x(t), y(t)) has coordinates:
+#+BEGIN_EXPORT latex
+\begin{align*}
+  x_\Omega &= x - y^\prime \cdot \dfrac{x^{\prime 2} + y^{\prime 2}}{%
+             x^\prime y^{\prime\prime} - x^{\prime\prime y^\prime}} \\
+  y_\Omega &= y + x^\prime \cdot \dfrac{x^{\prime 2} + y^{\prime 2}}{%
+             x^\prime y^{\prime\prime} - x^{\prime\prime y^\prime}}
+\end{align*}
+#+END_EXPORT
+
+and the radius of curvature at M_t is:
+#+BEGIN_EXPORT latex
+\[
+  R = \dfrac{(x^{\prime 2} + y^{\prime 2})^{\frac{3}{2}}}{%
+    x^\prime y^{\prime\prime} - x^{\prime\prime y^\prime}}
+\]
+#+END_EXPORT
+
+We have:
+#+BEGIN_SRC sage :session t :tangle ../scratch/osculating_parabola.sage :exports both
+  # parabola in parametric form
+  t = var('t'); p = 2
+  x(t) = t; y(t) = t^2 / (2*p); f(t) = [x(t), y(t)]
+  df(t) = [x(t).diff(t), y(t).diff(t)]
+  d2f(t) = [x(t).diff(t, 2), y(t).diff(t, 2)]
+
+  T(t) = [df(t)[0] / df(t).norm(), df[1](t) / df(t).norm()]
+  N(t) = [-df(t)[1] / df(t).norm(), df[0](t) / df(t).norm()]
+  R(t) = (df(t).norm())^3 / (df(t)[0]*d2f(t)[1] - df(t)[1] * d2f(t)[0])
+  Omega(t) = [f(t)[0] + R(t)*N(t)[0], f(t)[1] + R(t)*N(t)[1]]
+  g = parametric_plot(f(t), (t, -8, 8), color='green', thickness=2)
+  for u in srange(.4, 4, .2):
+	  g += line([f(t=u), Omega(t=u)], color='red', alpha = .5)
+	  g += circle(Omega(t=u), R(t=u), color='blue')
+  g.show(aspect_ratio=1, xmin=-12, xmax=7, ymin=-3, ymax=12)
+#+END_SRC
+
+which gives [[file:../scratch/oscullating_parabola.png][this]].
+
+** 3D Plots
+We can use the function =plot3d(f(x,y), (x,a,b), y(c,d,))= and for rendering,
+we have either the [[http://jedi.ks.uiuc.edu/~johns/tachyon/][Tachyon 3D Ray Tracer]] with the option ~viewer='tachyon'~
+or [[https://threejs.org/][three.js]] with ~viewer='threejs'~. 
+
+*Remark:* Unline =tachyon=, which outputs a static PNG file, =threejs= 
+outputs an interactive HTML, which is opened in the browser and can be
+manipulated.
+
+Example:
+#+BEGIN_SRC sage :session t :tangle ../scratch/3dplot1.sage :exports both
+  u, v = var('u, v')
+  h = lambda u, v : u^2 + 2*v^2
+  g3 = plot3d(h, (u, -1,1), (v, -1,1), aspect_ratio=[1,1,1])
+  g3.show(viewer='tachyon')
+#+END_SRC
+
+which is [[file:../scratch/plot3d1.png][this]].
+
+*Implicit 3D plots* can also be drawn with the command =implicit_plot3d=.
+Let us draw the /Cassini surface/: (a^2 + x^2 + y^2)^2 = 4a^2x^2 + z^4:
+#+BEGIN_SRC sage :session t :tangle ../scratch/cassini.sage :exports both
+  x, y, z = var('x,y,z'); a = 1
+  h = lambda x, y, z : (a^2 + x^2 + y^2)^2 - 4*a^2*x^2-z^4
+  cassini = implicit_plot3d(h, (x, -3, 3), (y, -3, 3), (z, -2, 2),
+							plot_points=100)
+  cassini.show(viewer='threejs')
+#+END_SRC
+
+which is [[file:../scratch/cassini.html][this]] (interactive HTML).
