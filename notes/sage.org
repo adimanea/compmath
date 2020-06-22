@@ -627,7 +627,7 @@ which gives [[file:../scratch/lde_plot.png][this]].
 
 ** Osculating Circles of a Parabola
 The centre of curvature \Omega at a point M_t = (x(t), y(t)) has coordinates:
-#+BEGIN_SRC latex :results raw :file ltximg/centre.png
+#+BEGIN_SRC latex :results raw :file ltximg/centre.png :exports results
 \begin{align*}
   x_\Omega &= x - y^\prime \cdot \dfrac{x^{\prime 2} + y^{\prime 2}}{%
              x^\prime y^{\prime\prime} - x^{\prime\prime} y^\prime} \\
@@ -636,18 +636,16 @@ The centre of curvature \Omega at a point M_t = (x(t), y(t)) has coordinates:
 \end{align*}
 #+END_SRC
 
-#+RESULTS:
 [[file:ltximg/centre.png]]
 
 and the radius of curvature at M_t is:
-#+BEGIN_SRC latex :results raw :file ltximg/radius.png
+#+BEGIN_SRC latex :results raw :file ltximg/radius.png :exports results
 \[
   R = \dfrac{(x^{\prime 2} + y^{\prime 2})^{\frac{3}{2}}}{%
     x^\prime y^{\prime\prime} - x^{\prime\prime} y^\prime}
 \]
 #+END_SRC
 
-#+RESULTS:
 [[file:ltximg/radius.png]]
 
 We have:
