@@ -699,3 +699,177 @@ Let us draw the /Cassini surface/: (a^2 + x^2 + y^2)^2 = 4a^2x^2 + z^4:
 #+END_SRC
 
 which is [[file:../scratch/cassini.html][this]] (interactive HTML, approx. 9MB, impossible to render correctly on GitHub).
+
+* Differential Equations
+** First Order ODE
+The general form is F(x, y(x), y'(x)) = 0, so we will have to define
+the variable =x= and the function =y=, that depends on =x=:
+#+BEGIN_SRC sage :session t
+  x = var('x')
+  y = function('y')(x)
+#+END_SRC
+
+Then, the general syntax is:
+#+BEGIN_SRC sage :session t
+  desolve(equation, variable, ics=..., ivar=..., show_method=..., contrib_ode=...)
+#+END_SRC
+where:
+- =equation= is the differential equation, written, e.g., as ~diff(y,x) == 2*y + x~;
+- =variable= is the /dependent/ variable, i.e. the function (=y= in the case above);
+- =ics= is optional and stands for /initial conditions/. For a first order equation,
+  this is =[x0, y0]= and for a second-order equation, it is =[x0,y0,x1,y1]= or
+  =[x0,y0,y0']=;
+- =ivar= is optional and stands for the /independent variable/, i.e. =x= in our
+  case above. It must be specified when there are more parameters, e.g.
+  ~y' = ay + bx + c~;
+- =show_method= is an optional Boolean set to =false= by default. For =true=,
+  Sage returns =[solution, method]=, where =method= shows how it was solved and
+  it can be: =linear, separable, exact, homogeneous, bernoulli, generalized homogeneous=;
+- =contrib_ode= is an optional Boolean set to =false= by default. If =true=,
+  it can solve more complicated equations such as Clairaut, Lagrange, Riccati,
+  but it generally takes longer.
+
+*** Example: Linear Equation
+Take the equation: y' + 3y = e^x.
+
+This is solved as:
+#+BEGIN_SRC sage :session t :tangle ../scratch/linear_ode.sage :exports both :results output
+  x = var('x'); y = function('y')(x)
+  desolve(diff(y,x) + 3*y == exp(x), y, show_method=True)
+#+END_SRC
+
+which gives:
+
+#+RESULTS:
+: [1/4*(4*_C + e^(4*x))*e^(-3*x), 'linear']
+
+*** Example: Separable Equation
+Take the equation yy' = x.
+
+This is solved by:
+#+BEGIN_SRC sage :session t :tangle ../scratch/separable_ode.sage :exports both :results output
+  x = var('x'); y = function('y')(x)
+  desolve(y*diff(y,x) == x, y, show_method=True)
+#+END_SRC
+which gives:
+#+RESULTS:
+: [1/2*y(x)^2 == 1/2*x^2 + _C, 'separable']
+
+*** Example: Bernoulli Equation
+Example: y' - y = xy^4.
+#+BEGIN_SRC sage :session t :tangle ../scratch/bernoulli_ode.sage :exports both :results output
+  x = var('x'); y = function('y')(x)
+  desolve(diff(y,x)-y == x*y^4, y, show_method=True)
+#+END_SRC
+which gives:
+#+RESULTS:
+: [e^x/(-1/3*(3*x - 1)*e^(3*x) + _C)^(1/3), 'bernoulli']
+
+*** Example: Homogeneous Equation
+Note that these equations have an implicit solution.
+
+Example: x^2 y' = y^2 + xy + x^2
+#+BEGIN_SRC sage :session t :tangle ../scratch/homogeneous_ode.sage :exports both :results output
+  x = var('x'); y = function('y')(x)
+  desolve(x^2*diff(y,x) == y^2 + x*y + x^2, y, show_method=True)
+#+END_SRC
+which gives the implicit solution:
+#+RESULTS:
+: [_C*x == e^(arctan(y(x)/x)), 'homogeneous']
+
+*** Example: Exact Equations
+Solve: y' = (cos(y) - 2x)/(y + x*sin(y)).
+#+BEGIN_SRC sage :session t :tangle ../scratch/exact_ode.sage :exports both :results output
+  x = var('x'); y = function('y')(x)
+  desolve(diff(y,x) == (cos(y) - 2*x)/(y + x*sin(y)), y, show_method=True)
+#+END_SRC
+
+The implicit solution is:
+#+RESULTS:
+: [x^2 - x*cos(y(x)) + 1/2*y(x)^2 == _C, 'exact']
+
+*** Example: Riccati Equations
+Solve the equation: y' = xy^2 + y/x - 1/x^2.
+
+This time, we have to enable =contrib_ode=.
+#+BEGIN_SRC sage :session t :tangle ../scratch/riccati_ode.sage :exports both :results output
+  x = var('x'); y = function('y')(x)
+  desolve(diff(y,x) == x*y^2 + y/x - 1/x^2, y, contrib_ode=True, show_method=True)
+#+END_SRC
+
+The solution is here:
+#+RESULTS:
+: [[y(x) == -1/2*((_C*(bessel_Y(4, 2*sqrt(-x)) - bessel_Y(2, 2*sqrt(-x))) + bessel_J(4, 2*sqrt(-x)) - bessel_J(2, 2*sqrt(-x)))*x + 3*(_C*bessel_Y(3, 2*sqrt(-x)) + bessel_J(3, 2*sqrt(-x)))*sqrt(-x))/((_C*bessel_Y(3, 2*sqrt(-x)) + bessel_J(3, 2*sqrt(-x)))*sqrt(-x)*x^2)],
+:  'riccati']
+
+Note that the result is presented as a list, so we can extract only the
+type of equation with =desolve(...)[1]= or only the solution with =desolve(...)[0]=.
+
+*** Improving the Presentation of Solutions
+We can rearrange the output to use common factors if possible in the solution.
+
+Take the equation y' + 2y = x^2 - 2x + 3.
+
+Initially, the solution looks like this:
+#+BEGIN_SRC sage :session t :tangle ../scratch/linear_ode_notexpanded.sage :exports both :results output
+  x = var('x'); y = function('y')(x)
+  DE = diff(y,x) + 2*y == x**2 - 2*x + 3
+  desolve(DE,y)
+#+END_SRC
+
+#+RESULTS:
+: 1/4*((2*x^2 - 2*x + 1)*e^(2*x) - 2*(2*x - 1)*e^(2*x) + 4*_C + 6*e^(2*x))*e^(-2*x)
+
+To clear this out, we =expand= the solution:
+#+BEGIN_SRC sage :session t :tangle ../scratch/linear_ode_expanded.sage :exports both :results output
+  x = var('x'); y = function('y')(x)
+  DE = diff(y,x) + 2*y == x**2 - 2*x + 3
+  desolve(DE,y).expand()
+#+END_SRC
+
+This makes the solution clearer like so:
+#+RESULTS:
+: 1/2*x^2 + _C*e^(-2*x) - 3/2*x + 9/4
+
+We can add an initial condition, to eliminate the constant:
+#+BEGIN_SRC sage :session t :tangle ../scratch/linear_ode_ics.sage :exports both :results output
+  x = var('x'); y = function('y')(x)
+  DE = diff(y,x) + 2*y == x**2 - 2*x + 3
+  desolve(DE,y, ics=[0,1]).expand()
+#+END_SRC
+
+And this gives:
+#+RESULTS:
+: 1/2*x^2 - 3/2*x - 5/4*e^(-2*x) + 9/4
+
+For the cases when the solution is implicit, we can make it explicit, by using =solve=:
+#+BEGIN_SRC sage :session t :tangle ../scratch/separable_ode_explicit.sage :exports both :results output
+  x = var('x'); y = function('y')(x)
+  # assign the solutions, to use them later
+  ed = desolve(diff(y,x) * log(y) == y*sin(x), y)
+  print('Implicit solution: ' + str(ed))
+
+  # since the solution is implicit, we make it explicit
+  print('Explicit solution:')
+  solve(ed, y)
+
+  # give a random value to _C
+  c = ed.variables()[0]                   # variables = (_C, x)
+  print('Explicit solution, with a particular _C:')
+  solve(ed,y)[0].substitute(c==5).rhs()
+
+  # plot several solutions (for various _C)
+  P = Graphics()                          # initialize an empty canvas
+  for k in range(1, 20, 2):
+	  P += plot(solve(ed, y)[0].substitute(c == 1 + k/4).rhs(), x, -3, 3)
+  P.show()
+#+END_SRC
+
+#+RESULTS:
+: Implicit solution: 1/2*log(y(x))^2 == _C - cos(x)
+: Explicit solution:
+: [y(x) == e^(-sqrt(2*_C - 2*cos(x))), y(x) == e^(sqrt(2*_C - 2*cos(x)))]
+: Explicit solution, with a particular _C:
+: e^(-sqrt(-2*cos(x) + 10))
+
+And the plot is [[file:../scratch/ode_plot.png][here]].
