@@ -1,6 +1,5 @@
 #+TITLE: SageMath Notes
 #+AUTHOR: Adrian
-#+STARTUP: latexpreview
 
 This document contains notes that help me learn to use Sage in my workflow.
 As such, it will be centered on my tools and approach and a more 
@@ -904,6 +903,8 @@ We will study a general form of the heat equation, [[file:ltximg/heat.png][this 
   \]
 #+END_SRC
 
+[[file:ltximg/heat.png]]
+
 We will use the conditions t > 0, z(0,t) = 0, z(l, t) = 0, x in [0, l], z(x, 0) = 1.
 
 We will seek non-zero solutions of the form z(x,t) = f(x)g(t), i.e. we use the
@@ -1019,6 +1020,8 @@ Take the system: y'(x) = A*y(x) and y(0) = C, given [[file:ltximg/system_lde.png
 	\end{pmatrix}
   \]
 #+END_SRC
+
+[[file:ltximg/system_lde.png]]
 
 Sage:
 #+BEGIN_SRC sage :session t :exports both :tangle ../scratch/system_lde.sage :results output
