@@ -627,22 +627,22 @@ which gives [[file:../scratch/lde_plot.png][this]].
 
 ** Osculating Circles of a Parabola
 The centre of curvature \Omega at a point M_t = (x(t), y(t)) has coordinates:
-#+BEGIN_EXPORT latex
+#+BEGIN_LaTeX
 \begin{align*}
   x_\Omega &= x - y^\prime \cdot \dfrac{x^{\prime 2} + y^{\prime 2}}{%
              x^\prime y^{\prime\prime} - x^{\prime\prime y^\prime}} \\
   y_\Omega &= y + x^\prime \cdot \dfrac{x^{\prime 2} + y^{\prime 2}}{%
              x^\prime y^{\prime\prime} - x^{\prime\prime y^\prime}}
 \end{align*}
-#+END_EXPORT
+#+END_LaTeX
 
 and the radius of curvature at M_t is:
-#+BEGIN_EXPORT html
+#+BEGIN_LaTeX
 \[
   R = \dfrac{(x^{\prime 2} + y^{\prime 2})^{\frac{3}{2}}}{%
     x^\prime y^{\prime\prime} - x^{\prime\prime y^\prime}}
 \]
-#+END_EXPORT
+#+END_LaTeX
 
 We have:
 #+BEGIN_SRC sage :session t :tangle ../scratch/osculating_parabola.sage :exports both
