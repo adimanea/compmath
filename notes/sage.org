@@ -1,5 +1,6 @@
 #+TITLE: SageMath Notes
 #+AUTHOR: Adrian
+#+STARTUP: latexpreview
 
 This document contains notes that help me learn to use Sage in my workflow.
 As such, it will be centered on my tools and approach and a more 
@@ -636,7 +637,7 @@ The centre of curvature \Omega at a point M_t = (x(t), y(t)) has coordinates:
 #+END_EXPORT
 
 and the radius of curvature at M_t is:
-#+BEGIN_EXPORT latex
+#+BEGIN_EXPORT html
 \[
   R = \dfrac{(x^{\prime 2} + y^{\prime 2})^{\frac{3}{2}}}{%
     x^\prime y^{\prime\prime} - x^{\prime\prime y^\prime}}
