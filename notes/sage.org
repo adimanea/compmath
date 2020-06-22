@@ -698,4 +698,4 @@ Let us draw the /Cassini surface/: (a^2 + x^2 + y^2)^2 = 4a^2x^2 + z^4:
   cassini.show(viewer='threejs')
 #+END_SRC
 
-which is [[file:../scratch/cassini.html][this]] (interactive HTML).
+which is [[file:../scratch/cassini.html][this]] (interactive HTML, approx. 9MB, impossible to render correctly on GitHub).
