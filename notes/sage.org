@@ -627,26 +627,28 @@ which gives [[file:../scratch/lde_plot.png][this]].
 
 ** Osculating Circles of a Parabola
 The centre of curvature \Omega at a point M_t = (x(t), y(t)) has coordinates:
-#+BEGIN_LaTeX
+#+BEGIN_SRC latex :results raw :file ltximg/centre.png
 \begin{align*}
   x_\Omega &= x - y^\prime \cdot \dfrac{x^{\prime 2} + y^{\prime 2}}{%
-             x^\prime y^{\prime\prime} - x^{\prime\prime y^\prime}} \\
+             x^\prime y^{\prime\prime} - x^{\prime\prime} y^\prime} \\
   y_\Omega &= y + x^\prime \cdot \dfrac{x^{\prime 2} + y^{\prime 2}}{%
-             x^\prime y^{\prime\prime} - x^{\prime\prime y^\prime}}
+             x^\prime y^{\prime\prime} - x^{\prime\prime} y^\prime}
 \end{align*}
-#+END_LaTeX
+#+END_SRC
 
-[[file:ltximg/org-ltximg_2838da609dfcfe68e696f5402d13f6a3cb934b29.png]]
+#+RESULTS:
+[[file:ltximg/centre.png]]
 
 and the radius of curvature at M_t is:
-#+BEGIN_LaTeX
+#+BEGIN_SRC latex :results raw :file ltximg/radius.png
 \[
   R = \dfrac{(x^{\prime 2} + y^{\prime 2})^{\frac{3}{2}}}{%
-    x^\prime y^{\prime\prime} - x^{\prime\prime y^\prime}}
+    x^\prime y^{\prime\prime} - x^{\prime\prime} y^\prime}
 \]
-#+END_LaTeX
+#+END_SRC
 
-[[file:ltximg/org-ltximg_fa75188989a5307428b8dd64d89df1118a44c324.png]]
+#+RESULTS:
+[[file:ltximg/radius.png]]
 
 We have:
 #+BEGIN_SRC sage :session t :tangle ../scratch/osculating_parabola.sage :exports both
