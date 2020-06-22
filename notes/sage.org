@@ -873,3 +873,166 @@ For the cases when the solution is implicit, we can make it explicit, by using =
 : e^(-sqrt(-2*cos(x) + 10))
 
 And the plot is [[file:../scratch/ode_plot.png][here]].
+
+** Second Order DE
+Example: y'' + 3y = x^2 - 7x + 31.
+
+#+BEGIN_SRC sage :session t :tangle ../scratch/second_ode_example.sage :exports both :results output
+  x = var('x'); y = function('y')(x)
+  DE = diff(y,x,2) + 3*y == x^2 - 7*x + 31
+  print('Expanded general solution:')
+  desolve(DE, y).expand()
+
+  # add initial conditions, e.g. y(0) = 1, y'(0) = 2
+  print("Adding initial conditions y(0) = 1, y'(0) = 2:")
+  desolve(DE, y, ics=[0,1,2]).expand()
+#+END_SRC
+
+This gives:
+#+RESULTS:
+: Expanded general solution:
+: 1/3*x^2 + _K2*cos(sqrt(3)*x) + _K1*sin(sqrt(3)*x) - 7/3*x + 91/9
+: Adding initial conditions y(0) = 1, y'(0) = 2:
+: 1/3*x^2 + 13/9*sqrt(3)*sin(sqrt(3)*x) - 7/3*x - 82/9*cos(sqrt(3)*x) + 91/9
+
+** PDE: Heat Equation
+We will study a general form of the heat equation, [[file:ltximg/heat.png][this one]].
+#+BEGIN_SRC latex :results raw :file ltximg/heat.png :exports results
+  \[
+	\dfrac{\partial^2 z}{\partial x^2}(x, t) = C \cdot %
+	\dfrac{\partial z}{\partial t}(x, t)
+  \]
+#+END_SRC
+
+We will use the conditions t > 0, z(0,t) = 0, z(l, t) = 0, x in [0, l], z(x, 0) = 1.
+
+We will seek non-zero solutions of the form z(x,t) = f(x)g(t), i.e. we use the
+method of /separation of variables/.
+
+#+BEGIN_SRC sage :session t :tangle ../scratch/heat_eq.sage :exports both :results output
+  # define variables and functions
+  x, t = var('x, t')
+  f = function('f')(x)
+  g = function('g')(t)
+  z = f * g
+
+  print('The equation:')
+  eq(x, t) = diff(z, x, 2) == diff(z, t); eq(x, t)
+
+  print('Divide by f(x) g(t), assumed not zero')
+  eqn = eq/z; eqn(x, t)
+
+  print('Separate equations and introduce a constant k')
+  k = var('k')
+  eq1(x, t) = eqn(x, t).lhs() == k; eq1
+  eq2(x, t) = eqn(x, t).rhs() == k; eq2
+
+  # solve them separately, starting with the second
+  g(t) = desolve(eq2(x,t), [g,t]); g(t)
+  # print('g(t) = ' + str(g(t)))
+
+  # for the second one, we need an assumption on k
+  assume(k > 0);
+  f(x) = desolve(eq1, [f,x])
+  print('f(x) = ' + str(f(x)))
+#+END_SRC
+
+This gives:
+
+#+RESULTS:
+: The equation:
+: g(t)*diff(f(x), x, x) == f(x)*diff(g(t), t)
+: Divide by f(x) g(t), assumed not zero
+: diff(f(x), x, x)/f(x) == diff(g(t), t)/g(t)
+: Separate equations and introduce a constant k
+: (x, t) |--> diff(f(x), x, x)/f(x) == k
+: (x, t) |--> diff(g(t), t)/g(t) == k
+: _C*e^(k*t)
+: f(x) = _K1*e^(sqrt(k)*x) + _K2*e^(-sqrt(k)*x)
+
+** Laplace Transform Applied to DE
+Solve the equation y'' - 3y' - 4y = sin(x), using the Laplace
+transform, with the initial conditions y(0) = 1, y'(0) = -1.
+
+#+BEGIN_SRC sage :session t :tangle ../scratch/laplace_tr_ode.sage :exports both :results output
+  x, s = var('x, s')
+  f = function('f')(x)
+  f(x) = sin(x);
+
+  print('Laplace transform of sin(x):')
+  f.laplace(x,s)
+
+  print('Get the inverse transform:')
+  X(s) = 1/(s^2 - 3*s + 4)/(s^2 + 1) + (s-4)/(s^2 - 3*s - 4)
+  X(s).inverse_laplace(s, x)
+
+  print('=== ALTERNATIVE ===')
+  print('Decompose in partial fractions first')
+  X(s).partial_fraction()
+  print('Now use the inversion table.')
+
+  print('=== ALTERNATIVE 2 ===')
+  print('Use desolve_laplace')
+  x = var('x'); y = function('y')(x)
+  eq = diff(y,x,x) - 3*diff(y,x) - 4*y - sin(x) == 0
+  print('General solution:')
+  desolve_laplace(eq, y)
+  print('Adding initial conditions [0,1,-1]')
+  desolve_laplace(eq, y, ics=[0,1,-1])
+#+END_SRC
+
+Which gives:
+#+RESULTS:
+#+begin_example
+Laplace transform of sin(x):
+x |--> 1/(s^2 + 1)
+Get the inverse transform:
+1/42*(sqrt(7)*sin(1/2*sqrt(7)*x) - 7*cos(1/2*sqrt(7)*x))*e^(3/2*x) + 1/6*cos(x) + e^(-x) + 1/6*sin(x)
+=== ALTERNATIVE ===
+Decompose in partial fractions first
+1/6*(s + 1)/(s^2 + 1) - 1/6*(s - 2)/(s^2 - 3*s + 4) + 1/(s + 1)
+Now use the inversion table.
+=== ALTERNATIVE 2 ===
+Use desolve_laplace
+General solution:
+1/85*(17*y(0) + 17*D[0](y)(0) + 1)*e^(4*x) + 1/10*(8*y(0) - 2*D[0](y)(0) - 1)*e^(-x) + 3/34*cos(x) - 5/34*sin(x)
+Adding initial conditions [0,1,-1]
+3/34*cos(x) + 1/85*e^(4*x) + 9/10*e^(-x) - 5/34*sin(x)
+#+end_example
+
+** Systems of LDE
+Take the system: y'(x) = A*y(x) and y(0) = C, given [[file:ltximg/system_lde.png][this]].
+#+BEGIN_SRC latex :file ltximg/system_lde.png :results raw :exports results
+  \[
+	A = \begin{pmatrix}
+	  2 & -2 & 0 \\
+	  -2 & 0 & 2 \\
+	  0 & 2 & 2
+	\end{pmatrix}, \quad %
+	y(x) = \begin{pmatrix}
+	  y_1(x) \\
+	  y_2(x) \\
+	  y_3(x)
+	\end{pmatrix}, \quad %
+	c = \begin{pmatrix}
+	  2 \\ 1 \\ -2
+	\end{pmatrix}
+  \]
+#+END_SRC
+
+Sage:
+#+BEGIN_SRC sage :session t :exports both :tangle ../scratch/system_lde.sage :results output
+  x = var('x')
+  y1 = function('y1')(x)
+  y2 = function('y2')(x)
+  y3 = function('y3')(x)
+  y = vector([y1, y2, y3])
+  A = matrix([[2,-2,0], [2,0,2], [0,2,2]])
+  system = [diff(y[i], x) - (A * y)[i] for i in range(3)]
+
+  desolve_system(system, [y1,y2,y3], ics=[0,2,1,-2])
+#+END_SRC
+
+which gives:
+#+RESULTS:
+: [y1(x) == e^(2*x) + 1, y2(x) == 1, y3(x) == -e^(2*x) - 1]
