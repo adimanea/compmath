@@ -873,6 +873,8 @@ For the cases when the solution is implicit, we can make it explicit, by using =
 
 And the plot is [[file:../scratch/ode_plot.png][here]].
 
+[[file:../scratch/ode_plot.png]]
+
 ** Second Order DE
 Example: y'' + 3y = x^2 - 7x + 31.
 
