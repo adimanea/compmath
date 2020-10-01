@@ -1,0 +1,150 @@
+#+TITLE: Requirements and Setup
+#+AUTHOR: Adrian Manea
+
+* Intro
+Most of the examples I include will be using [[https://www.sagemath.org/][SageMath]], ran either locally
+on =.sage= files, or more frequently on [[https://jupyter.org/][Jupyter]] notebooks.
+
+All tests will be performed on my only machine, which consists of:
+- Core i7 8th generation CPU;
+- 16 GB DDR4;
+- Radeon RX 550 GPU;
+- Manjaro i3 OS;
+- Emacs 27;
+- Firefox or Brave web browsers.
+
+Should any other equipment be needed or required, I will explicitly mention it.
+
+* SageMath
+** Installation
+The installer for SageMath can be downloaded from [[https://www.sagemath.org/download.html][here]]. Alternatively,
+if you are using a Linux-based OS, check the official repositories, as most
+distributions do have it in their repos.
+
+*Notes:* 
+- The installer itself is about 1GB in size and it requires a minimum of
+  5 GB (recommended 10 GB) of free disk space;
+- The program is quite modular, so additional modules can be installed,
+  depending on the needs, such as:
+  + =sagemath-jupyter=: the kernel for running SageMath inside a Jupyter notebook (*strongly recommended*);
+  + =sagemath-doc=: offline documentation for SageMath;
+  + =sage-shell-mode=: Emacs minor mode for interacting with the SageMath backend;
+  + =sagetex=: allows some literate programming using SageMath and LaTeX ([[https://www.ctan.org/tex-archive/macros/latex/contrib/sagetex/][CTAN link]]).
+
+More modules can be installed later on, as fit.
+
+** Terminal Use
+Once installed, SageMath can be used from the terminal, by simply typing =sage=,
+which produces an output such as the one below.
+#+begin_src sh
+  $ sage
+
+  ┌────────────────────────────────────────────────────────────────────┐
+  │ SageMath version 9.1, Release Date: 2020-05-20                     │
+  │ Using Python 3.8.3. Type "help()" for help.                        │
+  └────────────────────────────────────────────────────────────────────┘
+  sage:  
+#+end_src
+
+You can now use it in a REPL, interactive mode, for example, as a calculator:
+#+begin_src sh
+  sage: math.sqrt(5)
+  2.23606797749979
+  sage: 2^12
+  4096
+  sage: math.sin(1)
+  -0.9880316240928618
+  sage: math.sin(pi/2)
+  1.0
+  sage: exit()
+  Exiting Sage...
+#+end_src
+
+Alternatively, such computations (and more) can be saged in a =.sage= file and
+loaded in the REPL with the command =load('path/to/file.sage')=.
+
+This terminal use is more suited for quick, one-line computations, but we will
+mostly be writing source files.
+
+* Jupyter Notebooks
+Jupyter is a sort of an umbrella term for a (literate) programming environment
+that natively allows Julia, Python and R code. It can be extended with more
+languages via kernels, and we will be doing just that, using the SageMath kernel.
+
+The main dependency of the basic Jupyter package is a Python installation.
+So once you have Python 3 installed, follow the steps [[https://jupyter.org/install][here]]. For example, using
+the basic Python package manager =pip=, run the commands in the terminal:
+#+begin_src sh
+  $ pip install jupyterlab
+  $ pip install notebook
+#+end_src
+
+After it finishes installing, you have a full Jupyter install, which supports
+Julia, Python and R. For the SageMath package, the best way to install it in
+a Linux-based OS is to just search in your distribution repos for =sagemath-jupyter=
+and install that.
+
+Once that is also installed, note the following. Jupyter notebooks run in a
+client-server model, where the server is =localhost=, that is, your computer,
+or a dedicated web server. All Jupyter notebooks are stored as =.ipynb= files,
+the extension dating from when Jupyter was called IPython.
+For a local run (which we will be doing almost exclusively), go to the directory 
+where you want to store your notebooks and run the following:
+#+begin_src sh
+  # go to where you want to store the notebooks
+  $ cd path/to/my/notebooks/dir
+
+  # start the server on localhost, based in that directory
+  $ jupyter notebook
+
+  # alternatively, open a notebook, if you already have one
+  $ jupyter notebook myNotebook.ipynb
+#+end_src
+
+After running the commands above, the terminal should tell you where you can find
+the notebook directory in your browser and automatically open the web browser to
+that directory. Now, the rest of the interaction happens in the web interface.
+
+*TODO:* Will add pictures.
+
+Open or create a notebook, choosing the kernel you want it to use. In our case,
+we will be using SageMath, so choose that. Alternatively, you can open directly
+the Jupyter notebook directory for SageMath use by running the commands:
+#+begin_src sh
+  # change to the directory where you want to store the notebooks
+  $ cd path/to/my/notebooks/dir
+
+  # start a notebook with the SageMath kernel
+  $ sage -n jupyter
+#+end_src
+
+** Editing Notebooks
+A Jupyter notebook consists of /blocks/. These blocks can be of source code
+(SageMath, Julia, Python, R or other language for which you have the kernel installed)
+or text, using the [[https://www.markdownguide.org/basic-syntax][Markdown syntax]], including LaTeX via MathJax.
+
+After writing the contents of a block, run it by pressing =Shift + Enter=. If it
+was a code block, it will be interpreted. If if was a text (Markdown) block,
+it will be made into rich text.
+
+*Note:* For LaTeX rendering in SageMath outputs (which we will be using in
+symbolic computations), insert the following in a source block:
+#+begin_src sh
+  %display latex on
+#+end_src
+and run it with =Shift + Enter=. This will produce no output, but now all math
+output will be rendered using LaTeX.
+
+*TODO*: Add detailed Windows explanations, with pictures.
+
+* More Resources
+SageMath is impressively well documented, with PDFs of hundreds of pages for
+each subject it has a module written. The official website for these PDFs is
+[[https://doc.sagemath.org/][here]].
+
+Alternatively, a web search engine query for something like ='[subject] sagemath'=
+will almost certainly find such resources.
+
+Jupyter is documented officially [[https://jupyter.org/documentation][here]].
+
+An impressive, free book which we will be using extensively, is [[http://dl.lateralis.org/public/sagebook/sagebook-ba6596d.pdf][this one]].
